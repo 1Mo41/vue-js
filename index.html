@@ -12,6 +12,7 @@
     <title>Product App</title>
 </head>
 <body>
+
 <div id="app">
     <div class="product">
         <div class="product-image">
@@ -19,13 +20,22 @@
         </div>
         <div class="product-info">
             <h1>{{ product }}</h1>
-            <p v-if="inventory > 10">In stock</p>
-            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
-            <p v-else>Out of stock</p>
-            <span v-if="inventory >=50"> {{ onSale }}</span>
+            <p v-if="inStock">In stock</p>
+            <p v-else>Out of Stock</p>
+            <ul>
+                <li v-for="detail in details">{{ detail }}</li>
+            </ul>
+            <div v-for="variant in variants" :key="variant.variantId">
+                <p>{{ variant.variantColor }}</p>
+            </div>
+            <ul>
+                <li v-for=" sizes in sizes"> {{ sizes}}</li>
+            </ul>
         </div>
-
     </div>
+</div>
+</div>
+
 
 </div>
 </div>
