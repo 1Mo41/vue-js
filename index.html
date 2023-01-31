@@ -20,8 +20,13 @@
         </div>
         <div class="product-info">
             <h1>{{ product }}</h1>
+            <p>{{ description}}</p>
             <p v-if="inStock">In stock</p>
-            <p v-else>Out of Stock</p>
+            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+            <p v-else>Out of stock</p>
+
+            <p><a :href=" link ">More products like this</a></p>
+            <span v-if="inventory >= 50">{{ OnSale }}</span>
             <ul>
                 <li v-for="detail in details">{{ detail }}</li>
             </ul>
@@ -30,10 +35,14 @@
                     {{ variant.variantColor }}
                 </p>
             </div>
+            <ul>
+                <li v-for="sizes in sizes">{{ sizes }}</li>
+            </ul>
             <div class="cart">
                 <p>Cart({{ cart }})</p>
             </div>
             <button v-on:click="addToCart">Add to cart</button>
+            <button v-on:click="unToCart">un to cart</button>
 
 
         </div>
