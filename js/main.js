@@ -50,16 +50,14 @@ Vue.component('product', {
             >
                 Add to cart
             </button>
-            <button
-                    v-on:click="deleteCart"
-            >
-                delete
-            </button>
+          <button 
+              v-on:click="deleteFromCart">Delete</button>
 
  
             
         </div>
            <div>  <product-tabs :reviews="reviews" :shipping="shipping" :details="details"></product-tabs>
+        </div>
         </div>
  `,
     data() {
@@ -110,10 +108,9 @@ Vue.component('product', {
             this.$emit('add-to-cart',
                 this.variants[this.selectedVariant].variantId);
         },
-        deleteCart() {
-            this.$emit('delete-to-cart',
-                this.variants[this.selectedVariant].variantId);
-        }
+        deleteFromCart() {
+                this.$emit('delete-from-cart', this.variants[this.selectedVariant].variantId);
+            }
     },
     mounted() {
         eventBus.$on('review-submitted', productReview => {
