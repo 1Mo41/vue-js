@@ -1,3 +1,21 @@
+Vue.component('product-details'
+    ,{
+        props: {
+            details: {
+                type: Array,
+                required: true,
+            }
+        },
+                template:
+                    `<ul>
+                        <li v-for="detail in details">{{detail}}</li>
+                    </ul>`,
+
+
+        }
+)
+
+
 Vue.component('product', {
     template: `
    <div class="product">
@@ -10,12 +28,10 @@ Vue.component('product', {
             <p v-if="inStock">In stock</p>
             <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
             <p class = "style-text" style="text-decoration: line-through"v-else>Out of stock</p>
-
+            <p>Shipping: {{ shipping }}</p>
             <p><a :href=" link ">More products like this</a></p>
             <span v-if="inventory >= 50">{{ sale }}</span>
-            <ul>
-                <li v-for="detail in details">{{ detail }}</li>
-            </ul>
+            <product-details :details="details"></product-details>
             <div
                     class="color-box"
                     v-for="(variant, index) in variants"
@@ -26,9 +42,7 @@ Vue.component('product', {
             <ul>
                 <li v-for="sizes in sizes">{{ sizes }}</li>
             </ul>
-            <div class="cart">
-                <p>Cart({{ cart }})</p>
-            </div>
+ 
             <button
                     v-on:click="addToCart"
                     :disabled="!inStock"
@@ -38,12 +52,11 @@ Vue.component('product', {
             </button>
 
             <button
-                    v-on:click="unToCart"
-                    :disabled="!inStock"
-                    :class="{ disabledButton: !inStock }"
+                    v-on:click="deleteCart"
             >
-                Un to cart
+                delete
             </button>
+            
         </div>
 
    </div>
@@ -77,19 +90,27 @@ Vue.component('product', {
 
 
             selectedVariant: 0,
-            cart: 0,
         }
     },
+    props: {
+        premium: {
+            type: Boolean,
+            required: true
+        }
+    },
+
     methods: {
-        addToCart() {
-            this.cart += 1
-        },
         updateProduct(index) {
             this.selectedVariant = index;
             console.log(index);
         },
-        unToCart() {
-            this.cart -= 1;
+        addToCart() {
+            this.$emit('add-to-cart',
+                this.variants[this.selectedVariant].variantId);
+        },
+        deleteCart() {
+            this.$emit('delete-to-cart',
+                this.variants[this.selectedVariant].variantId);
         }
     },
     computed: {
@@ -104,15 +125,32 @@ Vue.component('product', {
         },
         sale(){
             return this.brand + ' ' + this.product + ' ' + this.OnSale
+        },
+        shipping() {
+            if (this.premium) {
+                return "Free";
+            } else {
+                return 2.99
+            }
         }
+
     }
 })
 
 let app = new Vue({
     el: '#app',
     data: {
-        premium: true
+        premium: true,
+        cart: []
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id);
+        },
+        deleteCart(id){
+            this.cart.pop(id);
+        }
     }
+
+
 })
-
-
