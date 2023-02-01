@@ -6,26 +6,30 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script defer src="js/vue.js"></script>
-    <script defer src="js/main.js"></script>
     <link rel="stylesheet" href="css/main.css">
-
+    <script defer src="js/main.js"></script>
     <title>Product App</title>
 </head>
 <body>
-
 <div id="app">
     <div class="cart">
         <p>Cart({{ cart.length }})</p>
     </div>
-
-    <product :premium="premium" @add-to-cart="updateCart" @delete-to-cart="deleteCart"></product>
-
+    <product :premium="premium" @add-to-cart="updateCart" @delete-from-cart="deleteCart"></product>
+    <div>
+        <h2>Reviews</h2>
+        <p v-if="!reviews.length">There are no reviews yet.</p>
+        <ul>
+            <li v-for="review in reviews">
+                <p>{{ review.name }}</p>
+                <p>Rating: {{ review.rating }}</p>
+                <p>Recommendation: {{review.recommend}}</p>
+                <p>{{ review.review }}</p>
+            </li>
+        </ul>
     </div>
-</div>
-</div>
+    <product-review @review-submitted="addReview"></product-review>
 
-
-</div>
 </div>
 </body>
 </html>
