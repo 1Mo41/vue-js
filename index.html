@@ -17,18 +17,9 @@
     </div>
     <product :premium="premium" @add-to-cart="updateCart" @delete-from-cart="deleteCart"></product>
     <div>
-        <h2>Reviews</h2>
-        <p v-if="!reviews.length">There are no reviews yet.</p>
-        <ul>
-            <li v-for="review in reviews">
-                <p>{{ review.name }}</p>
-                <p>Rating: {{ review.rating }}</p>
-                <p>Recommendation: {{review.recommend}}</p>
-                <p>{{ review.review }}</p>
-            </li>
-        </ul>
+        <product-tabs :reviews="reviews"></product-tabs>
     </div>
-    <product-review @review-submitted="addReview"></product-review>
+
 
 </div>
 </body>
