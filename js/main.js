@@ -21,7 +21,7 @@ Vue.component('product', {
     template: `
    <div class="product">
 	<div class="product-image">
-            <img :src="image" :alt="altText"/>
+            <img :src="image" :alt="altText"  :width="width" />
         </div>
         <div class="product-info">
             <h1>{{ title }}</h1>
@@ -36,11 +36,19 @@ Vue.component('product', {
                     class="color-box"
                     v-for="(variant, index) in variants"
                     :key="variant.variantId"
-                    :style="{ backgroundColor:variant.variantColor }"
+                    :style="{ backgroundColor:variant.variantColor}"
                     @mouseover="updateProduct(index)"
             ></div>
             <ul>
-                <li v-for="sizes in sizes">{{ sizes }}</li>
+               <button v-on:click="sizeS">S</button>
+               <button v-on:click="sizeM">M</button>
+               <button v-on:click="sizeL">L</button>
+               <button v-on:click="sizeXl">XL</button>
+               <button v-on:click="sizeXxl">XXL</button>
+               <button v-on:click="sizeXxxl">XXXL</button>
+           
+                
+                
             </ul>
  
             <button
@@ -70,21 +78,25 @@ Vue.component('product', {
             OnSale: "Распродажа,успей купить по выгодной цене!",
             link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks",
             details: ['80% cotton', '20% polyester', 'Gender-neutral'],
+            width:500,
             variants: [
                 {
                     variantId: 2234,
                     variantColor: 'green',
                     variantImage: "./img/vmSocks-green-onWhite.jpg",
-                    variantQuantity: 10
+                    variantQuantity: 10,
+                    variantStyle: 0,
+
                 },
                 {
                     variantId: 2235,
                     variantColor: 'blue',
                     variantImage: "./img/vmSocks-blue-onWhite.jpg",
-                    variantQuantity: 0
+                    variantQuantity: 0,
+                    variantStyle: 10
                 }
 
-            ], sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+            ],
 
 
 
@@ -96,13 +108,17 @@ Vue.component('product', {
         premium: {
             type: Boolean,
             required: true
-        }
+        },
+
     },
+
 
     methods: {
         updateProduct(index) {
             this.selectedVariant = index;
-            console.log(index);
+
+        },
+        sizeLl(size){
         },
         addToCart() {
             this.$emit('add-to-cart',
@@ -110,7 +126,25 @@ Vue.component('product', {
         },
         deleteFromCart() {
                 this.$emit('delete-from-cart', this.variants[this.selectedVariant].variantId);
-            }
+            },
+        sizeS(){
+        this.$emit('sizeS'), this.width = 200
+        },
+        sizeM(){
+            this.$emit('sizeM'),this.width = 250
+        },
+        sizeL(){
+            this.$emit('sizeL'),this.width = 300
+        },
+        sizeXl(){
+            this.$emit('sizesXl'),this.width = 350
+        },
+        sizeXxl(){
+            this.$emit('sizesXxl'),this.width = 400
+        },
+        sizeXxxl(){
+            this.$emit('sizesXxxl'),this.width = 500
+        },
     },
     mounted() {
         eventBus.$on('review-submitted', productReview => {
@@ -124,6 +158,9 @@ Vue.component('product', {
         image() {
             return this.variants[this.selectedVariant].variantImage;
         },
+        // width(){
+        //     return this.variants[this.selectedVariant].variantWidth
+        // },
         inStock() {
             return this.variants[this.selectedVariant].variantQuantity
         },
@@ -190,6 +227,7 @@ Vue.component('product-review', {
     },
     methods: {
         onSubmit() {
+            this.errors = [];
             if(this.name && this.review && this.rating && this.recommend) {
                 let productReview = {
                     name: this.name,
